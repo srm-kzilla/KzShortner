@@ -23,6 +23,7 @@ void run() async {
       theme: ThemeData.light(useMaterial3: true),
       // darkTheme: ThemeData.dark(useMaterial3: true),
       home: const HomeScreen(),
+      debugShowCheckedModeBanner: false,
     ),
   );
 }
