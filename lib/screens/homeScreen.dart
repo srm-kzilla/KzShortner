@@ -9,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isCustomise = true;
+  bool isCustomise = false;
   AppBar _buildAppBar() {
     return AppBar(
       elevation: 0,
@@ -51,13 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget centertext() {
-    bool isCustomise = true;
-    return (Visibility(
-        visible: isCustomise,
-        child: Text(
-          "A breezy \nURL shrinker",
-          style: TextStyle(fontSize: 40),
-        )));
+    return Text(
+      "A breezy \nURL shrinker",
+      style: TextStyle(fontSize: 40),
+    );
   }
 
   Widget searchBox() {
@@ -125,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        SizedBox(width: 40),
+        Spacer(),
         Container(
           width: 170,
           height: 68,
