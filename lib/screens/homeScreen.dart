@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 65,
       padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-          color: Color(0xffF5F5F5), borderRadius: BorderRadius.circular(2)),
+          color: Color(0xffF5F5F5), borderRadius: BorderRadius.circular(19)),
       child: TextField(
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(top: 15),
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 65,
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-            color: Color(0xffF5F5F5), borderRadius: BorderRadius.circular(2)),
+            color: Color(0xffF5F5F5), borderRadius: BorderRadius.circular(19)),
         child: TextField(
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 15),
@@ -159,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: _buildAppBar(),
       body: Container(
         color: Color.fromRGBO(255, 255, 255, 1),
