@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kzlinks/components/analyticbox.dart';
+import 'package:kzlinks/components/analytic_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AnalyticScreen extends StatelessWidget {
