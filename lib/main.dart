@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kzlinks/screens/home.dart';
 import 'package:kzlinks/utils/flutter_init_sdk.dart';
-import 'package:kzlinks/screens/homeScreen.dart';
+import 'package:kzlinks/screens/home_screen.dart';
 
 void main() {
   runZonedGuarded(
