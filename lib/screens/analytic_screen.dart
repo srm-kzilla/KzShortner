@@ -7,6 +7,8 @@ class AnalyticScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const clicks = '4100';
+    const link = 'https://kzilla.xyz/';
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -81,14 +83,91 @@ class AnalyticScreen extends StatelessWidget {
               thickness: 5,
               interactive: true,
               radius: const Radius.circular(10),
-              child: ListView.builder(
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.all(10), // Add padding to the widget
-                    child: ScrollableListViewWidget(),
-                  );
-                },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    //link Widget
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SizedBox(
+                        height: 65,
+                        child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: const Color(0xffF5F5F5),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const Center(
+                              child: Text(
+                                link,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 17,
+                                ),
+                              ),
+                            )),
+                      ),
+                    ),
+                    //Analytics Widget List
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.black),
+                            child: const Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'Clicks',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    clicks,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: ScrollableListViewWidget(
+                          'Operating system'), //Data needs to be fetched from the server and passed to this widget
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: ScrollableListViewWidget(
+                          'Browser'), //Data needs to be fetched from the server and passed to this widget
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: ScrollableListViewWidget(
+                          'Locations'), //Data needs to be fetched from the server and passed to this widget
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
