@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart'; // For clipboard functionality
+
+const ShortenedLink = "link1.xyz";
+const AnalyticsLink = "link2.xyz";
+const YourLink = "originallink.xyz";
 
 class resultScreen extends StatefulWidget {
   const resultScreen({super.key});
 
   @override
-  State<resultScreen> createState() => _resultScreenState();
+  State<resultScreen> createState() => _HomeScreenState();
 }
 
-class _resultScreenState extends State<resultScreen> {
-  bool isCustomise = true;
-
+class _HomeScreenState extends State<resultScreen> {
+  bool isCustomise = false;
   AppBar _buildAppBar() {
     return AppBar(
       elevation: 0,
@@ -18,9 +21,12 @@ class _resultScreenState extends State<resultScreen> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          //Padding(padding: EdgeInsets.only(left: 0)),
           Image(
               image: ResizeImage(AssetImage('assets/icon.png'),
                   width: 50, height: 50)),
+
+          // to add space between the two objects in appbar
           SizedBox(
             width: 200,
           ),
@@ -34,7 +40,7 @@ class _resultScreenState extends State<resultScreen> {
               children: [
                 Padding(padding: EdgeInsets.only(top: 14)),
                 Text(
-                  'My Links',
+                  'My Files',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -49,11 +55,31 @@ class _resultScreenState extends State<resultScreen> {
   }
 
   Widget centertext() {
-    return Visibility(
-      visible: isCustomise,
-      child: Text(
-        "An uninterrupted \nURL shrinker",
-        style: TextStyle(fontSize: 40),
+    return Text(
+      "An Uninterrupted \nURL shrinker",
+      style: TextStyle(fontSize: 40),
+    );
+  }
+
+  Widget LinkBox() {
+    return Container(
+      height: 65,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: Color(0xffF5F5F5),
+        borderRadius: BorderRadius.circular(19),
+      ),
+      child: TextField(
+        readOnly: true, // Make the text field non-editable
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(top: 15),
+          border: InputBorder.none,
+          hintText: YourLink,
+          hintStyle: TextStyle(
+            color: Color.fromARGB(255, 0, 0, 0),
+            fontSize: 26,
+          ),
+        ),
       ),
     );
   }
@@ -63,89 +89,71 @@ class _resultScreenState extends State<resultScreen> {
       height: 65,
       padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-          color: Color(0xffF5F5F5), borderRadius: BorderRadius.circular(2)),
-      child: TextField(
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(top: 15),
-            border: InputBorder.none,
-            labelText: 'https://dripai1.framer.ai',
-            labelStyle: TextStyle(color: Color(0xff000000), fontSize: 26)),
+        color: Color(0xffF5F5F5),
+        borderRadius: BorderRadius.circular(19),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              readOnly: true, // Make the text field non-editable
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(top: 15),
+                border: InputBorder.none,
+                hintText: ShortenedLink,
+                hintStyle: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 28,
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.copy),
+            onPressed: () {
+              final textToCopy = ShortenedLink;
+              Clipboard.setData(ClipboardData(text: textToCopy));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Text copied to clipboard'),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget customsearchBox() {
-    TextEditingController _textEditingController = TextEditingController();
-    bool isCustomise = true; // Set this value based on your logic
-
-    return Visibility(
-      visible: isCustomise,
-      child: Container(
-        height: 65,
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: Color(0xffF5F5F5),
-          borderRadius: BorderRadius.circular(2),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 15),
-                  border: InputBorder.none,
-                  hintText: 'custom code...',
-                  hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 26),
-                ),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.copy),
-              onPressed: () {
-                final String text = _textEditingController.text;
-                if (text.isNotEmpty) {
-                  // Copy the text to the clipboard
-                  Clipboard.setData(ClipboardData(text: text));
-                }
-              },
-            ),
-          ],
-        ),
+    return Container(
+      height: 65,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: Color(0xffF5F5F5),
+        borderRadius: BorderRadius.circular(19),
       ),
-    );
-  }
-
-  Widget analyticsBox() {
-    return Visibility(
-      visible: isCustomise,
-      child: Container(
-        height: 65,
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: Color(0xffF5F5F5),
-          borderRadius: BorderRadius.circular(2),
-        ),
-        child: Stack(
-          children: [
-            TextField(
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              readOnly: true,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(top: 15),
                 border: InputBorder.none,
-                hintText: 'analytics code...',
-                hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 26),
+                hintText: AnalyticsLink,
+                hintStyle: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 26,
+                ),
               ),
             ),
-            Positioned(
-              right: 2,
-              top: 10,
-              child: IconButton(
-                icon: Icon(Icons.analytics),
-                onPressed: () {},
-              ),
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: Icon(Icons.analytics),
+            onPressed: () {},
+          ),
+        ],
       ),
     );
   }
@@ -154,23 +162,25 @@ class _resultScreenState extends State<resultScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Container(
-          padding: EdgeInsets.only(left: 0),
-          width: 180,
-          height: 70,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12), color: Colors.black),
-          child: Column(
-            children: [
-              Padding(padding: EdgeInsets.only(top: 12)),
-              Text(
-                'shrink another \nURL',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
+        Padding(padding: EdgeInsets.only(top: 110, left: 6)),
+        GestureDetector(
+          child: Container(
+            width: 170,
+            height: 68,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12), color: Colors.black),
+            child: Column(
+              children: [
+                Padding(padding: EdgeInsets.only(bottom: 15)),
+                Text(
+                  'Shrink Another \nURL',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         ),
         Spacer(),
@@ -210,6 +220,7 @@ class _resultScreenState extends State<resultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: _buildAppBar(),
       body: Container(
         color: Color.fromRGBO(255, 255, 255, 1),
@@ -218,28 +229,24 @@ class _resultScreenState extends State<resultScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Spacer(
-              flex: 5,
+              flex: 1,
             ),
             centertext(),
             SizedBox(
-              height: 150,
+              height: 96,
+            ),
+            LinkBox(),
+            SizedBox(
+              height: 30,
             ),
             searchBox(),
             SizedBox(
-              height: 50,
+              height: 30,
             ),
             customsearchBox(),
-            SizedBox(
-              height: 10, // Add some spacing here
-            ),
-            analyticsBox(),
-            SizedBox(
-              height: 85, // Add some spacing here
-            ),
-            // Add the third text box
             buttons(),
             Spacer(
-              flex: 10,
+              flex: 2,
             ),
             credits(context),
           ],
@@ -248,5 +255,3 @@ class _resultScreenState extends State<resultScreen> {
     );
   }
 }
-
-class _textEditingController {}
