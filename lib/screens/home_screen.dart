@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Padding(padding: EdgeInsets.only(top: 14)),
                 Text(
-                  'My Files',
+                  'My Links',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
