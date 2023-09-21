@@ -5,14 +5,14 @@ const ShortenedLink = "link1.xyz";
 const AnalyticsLink = "link2.xyz";
 const YourLink = "originallink.xyz";
 
-class resultScreen extends StatefulWidget {
-  const resultScreen({super.key});
+class ResultScreen extends StatefulWidget {
+  const ResultScreen({super.key});
 
   @override
-  State<resultScreen> createState() => _HomeScreenState();
+  State<ResultScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<resultScreen> {
+class _HomeScreenState extends State<ResultScreen> {
   bool isCustomise = false;
   AppBar _buildAppBar() {
     return AppBar(
@@ -54,14 +54,14 @@ class _HomeScreenState extends State<resultScreen> {
     );
   }
 
-  Widget centertext() {
+  Widget centerText() {
     return Text(
       "An Uninterrupted \nURL shrinker",
       style: TextStyle(fontSize: 40),
     );
   }
 
-  Widget LinkBox() {
+  Widget linkBox() {
     return Container(
       height: 65,
       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -231,11 +231,11 @@ class _HomeScreenState extends State<resultScreen> {
             Spacer(
               flex: 1,
             ),
-            centertext(),
+            centerText(),
             SizedBox(
               height: 96,
             ),
-            LinkBox(),
+            linkBox(),
             SizedBox(
               height: 30,
             ),
