@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ScrollableListViewWidget extends StatelessWidget {
-  final String s;
-  const ScrollableListViewWidget(this.s, {super.key});
+  final String title;
+  final List<String> items;
+  const ScrollableListViewWidget(this.title, this.items, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class ScrollableListViewWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            s,
+            title,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -38,10 +39,10 @@ class ScrollableListViewWidget extends StatelessWidget {
               interactive: true,
               radius: const Radius.circular(10),
               child: ListView.builder(
-                itemCount: 50,
+                itemCount: items.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text('Item $index'),
+                    title: Text(items[index]),
                     subtitle: const LinearProgressIndicator(
                       value: 0.5,
                       backgroundColor: Colors.grey,

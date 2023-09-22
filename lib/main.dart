@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:kzlinks/screens/analytic_screen.dart';
 import 'package:kzlinks/screens/home.dart';
 import 'package:kzlinks/utils/flutter_init_sdk.dart';
 
@@ -22,7 +22,7 @@ void run() async {
       title: 'KzLinks',
       theme: ThemeData.light(useMaterial3: true),
       // darkTheme: ThemeData.dark(useMaterial3: true),
-      home: const Home(),
+      home: const AnalyticScreen(),
     ),
   );
 }

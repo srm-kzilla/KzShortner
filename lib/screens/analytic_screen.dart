@@ -7,6 +7,12 @@ class AnalyticScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, List<String>> data = {
+      'Operating Systems': ['Windows', 'Mac', 'Linux', 'Android', 'iOS'],
+      'Browsers': ['Chrome', 'Firefox', 'Safari', 'Edge', 'Opera'],
+      'locations': ['India', 'USA', 'UK', 'Canada', 'Australia'],
+    };
+
     const clicks = '4100';
     const link = 'https://kzilla.xyz/';
     return Scaffold(
@@ -130,7 +136,8 @@ class AnalyticScreen extends StatelessWidget {
                                 color: Colors.black),
                             child: const Center(
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
                                     'Clicks',
@@ -151,20 +158,16 @@ class AnalyticScreen extends StatelessWidget {
                             )),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(10),
-                      child: ScrollableListViewWidget(
-                          'Operating system'), //Data needs to be fetched from the server and passed to this widget
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(10),
-                      child: ScrollableListViewWidget(
-                          'Browser'), //Data needs to be fetched from the server and passed to this widget
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(10),
-                      child: ScrollableListViewWidget(
-                          'Locations'), //Data needs to be fetched from the server and passed to this widget
+                    // Expanded(child:
+                    // ListView.builder(
+                    //   itemCount: 1,
+                    //   itemBuilder: (context, index) {
+                    //     return const Text('Hello World');
+                    //   },
+                    // ),),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ScrollableListViewWidget(data.keys.first,data.values.first),
                     ),
                   ],
                 ),
