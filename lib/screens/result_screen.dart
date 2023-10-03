@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For clipboard functionality
 
-const ShortenedLink = "link1.xyz";
-const AnalyticsLink = "link2.xyz";
-const YourLink = "originallink.xyz";
-
 class ResultScreen extends StatefulWidget {
-  const ResultScreen({super.key});
+  final String shortenedLink;
+  final String analyticsLink;
+  final String yourLink;
+
+  const ResultScreen({
+    Key? key,
+    required this.shortenedLink,
+    required this.analyticsLink,
+    required this.yourLink,
+  }) : super(key: key);
 
   @override
   State<ResultScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<ResultScreen> {
-  bool isCustomise = false;
   AppBar _buildAppBar() {
     return AppBar(
       elevation: 0,
@@ -21,12 +25,9 @@ class _HomeScreenState extends State<ResultScreen> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          //Padding(padding: EdgeInsets.only(left: 0)),
           Image(
-              image: ResizeImage(AssetImage('assets/icon.png'),
-                  width: 50, height: 50)),
-
-          // to add space between the two objects in appbar
+            image: ResizeImage(AssetImage('assets/icon.png'), width: 50, height: 50),
+          ),
           SizedBox(
             width: 200,
           ),
@@ -35,16 +36,19 @@ class _HomeScreenState extends State<ResultScreen> {
             width: 100,
             padding: EdgeInsets.only(bottom: 5),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12), color: Colors.black),
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.black,
+            ),
             child: Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 14)),
                 Text(
                   'My Files',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -70,11 +74,11 @@ class _HomeScreenState extends State<ResultScreen> {
         borderRadius: BorderRadius.circular(19),
       ),
       child: TextField(
-        readOnly: true, // Make the text field non-editable
+        readOnly: true,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.only(top: 15),
           border: InputBorder.none,
-          hintText: YourLink,
+          hintText: widget.yourLink,
           hintStyle: TextStyle(
             color: Color.fromARGB(255, 0, 0, 0),
             fontSize: 26,
@@ -96,11 +100,11 @@ class _HomeScreenState extends State<ResultScreen> {
         children: [
           Expanded(
             child: TextField(
-              readOnly: true, // Make the text field non-editable
+              readOnly: true,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(top: 15),
                 border: InputBorder.none,
-                hintText: ShortenedLink,
+                hintText: widget.shortenedLink,
                 hintStyle: TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
                   fontSize: 28,
@@ -111,7 +115,7 @@ class _HomeScreenState extends State<ResultScreen> {
           IconButton(
             icon: Icon(Icons.copy),
             onPressed: () {
-              final textToCopy = ShortenedLink;
+              final textToCopy = widget.shortenedLink;
               Clipboard.setData(ClipboardData(text: textToCopy));
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -141,7 +145,7 @@ class _HomeScreenState extends State<ResultScreen> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(top: 15),
                 border: InputBorder.none,
-                hintText: AnalyticsLink,
+                hintText: widget.analyticsLink,
                 hintStyle: TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
                   fontSize: 26,
@@ -168,16 +172,19 @@ class _HomeScreenState extends State<ResultScreen> {
             width: 170,
             height: 68,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12), color: Colors.black),
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.black,
+            ),
             child: Column(
               children: [
                 Padding(padding: EdgeInsets.only(bottom: 15)),
                 Text(
                   'Shrink Another \nURL',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -188,16 +195,19 @@ class _HomeScreenState extends State<ResultScreen> {
           width: 170,
           height: 68,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12), color: Colors.black),
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.black,
+          ),
           child: Column(
             children: [
               Padding(padding: EdgeInsets.only(top: 21)),
               Text(
                 'QR Code',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -208,13 +218,14 @@ class _HomeScreenState extends State<ResultScreen> {
 
   Widget credits(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(bottom: 15),
-        width: MediaQuery.sizeOf(context).width,
-        child: Text(
-          "crafted with ❤️ by your friends at SRMKZILLA team",
-          style: TextStyle(fontSize: 14),
-          textAlign: TextAlign.center,
-        ));
+      padding: EdgeInsets.only(bottom: 15),
+      width: MediaQuery.of(context).size.width,
+      child: Text(
+        "crafted with ❤️ by your friends at SRMKZILLA team",
+        style: TextStyle(fontSize: 14),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   @override
