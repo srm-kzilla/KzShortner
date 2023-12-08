@@ -31,4 +31,26 @@ class KzLink {
       timestamp: json['timestamp'],
     );
   }
+
+  KzLink copyWith({
+    String? linkId,
+    String? shortCode,
+    String? analyticsCode,
+    int? clicks,
+    String? creatorIpAddress,
+    bool? enabled,
+    String? longUrl,
+    int? timestamp,
+  }) {
+    return KzLink(
+      linkId: linkId ?? this.linkId,
+      shortCode: shortCode ?? this.shortCode,
+      analyticsCode: analyticsCode ?? this.analyticsCode,
+      clicks: clicks ?? this.clicks,
+      creatorIpAddress: creatorIpAddress ?? this.creatorIpAddress,
+      enabled: enabled ?? this.enabled,
+      longUrl: longUrl ?? this.longUrl,
+      timestamp: timestamp ?? this.timestamp,
+    );
+  }
 }

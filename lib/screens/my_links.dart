@@ -12,7 +12,7 @@ class MyLinks extends StatefulWidget {
 }
 
 class _MyLinksState extends State<MyLinks> {
-  Future<List<KzLink>> links = KzApi.getLinks();
+  late Future<List<KzLink>> links;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +24,8 @@ class _MyLinksState extends State<MyLinks> {
             Navigator.pop(context);
           },
         ),
+        title: const Text('My Links'),
+        surfaceTintColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -36,12 +38,29 @@ class _MyLinksState extends State<MyLinks> {
             future: links,
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.error == null) {
-                return MyLinksListview(links: snapshot.data!);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Pull down to refresh',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: MyLinksListview(
+                        links: snapshot.data!,
+                      ),
+                    ),
+                  ],
+                );
               } else if (snapshot.hasError) {
                 return ListView(
                   children: [
                     Column(
                       children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.3,
+                        ),
                         const Icon(
                           CupertinoIcons.exclamationmark_triangle_fill,
                           size: 100,
@@ -51,13 +70,35 @@ class _MyLinksState extends State<MyLinks> {
                           'Failed to load links!',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
+                        const SizedBox(height: 20),
+                        Text(
+                          '${snapshot.error}',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ],
                     ),
                   ],
                 );
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return ListView(
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.3,
+                        ),
+                        const Icon(
+                          Icons.link_sharp,
+                          size: 100,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Trying to get your shortend links...',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
+                  ],
                 );
               }
             },
@@ -65,5 +106,11 @@ class _MyLinksState extends State<MyLinks> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    links = KzApi.getLinks();
+    super.initState();
   }
 }
