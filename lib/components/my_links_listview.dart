@@ -12,7 +12,9 @@ import 'package:kzlinks/utils/number_format.dart';
 class LinkTile extends StatelessWidget {
   final KzLink link;
 
-  const LinkTile({super.key, required this.link});
+  final Function refresh;
+
+  const LinkTile({super.key, required this.link, required this.refresh});
 
   @override
   Widget build(BuildContext context) {
@@ -201,6 +203,7 @@ class LinkTile extends StatelessWidget {
                                   );
                                   return;
                                 } finally {
+                                  refresh();
                                   Navigator.of(context).pop();
                                 }
                               }
@@ -316,11 +319,12 @@ class LinkTile extends StatelessWidget {
                         ),
                       ),
                       PopupMenuItem(
-                        onTap: () {
+                        onTap: () async {
                           try {
-                            KzApi.disableOrEnableLink(
+                            await KzApi.disableOrEnableLink(
                               link.copyWith(enabled: !link.enabled),
                             );
+                            refresh();
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -340,9 +344,6 @@ class LinkTile extends StatelessWidget {
                                 dismissDirection: DismissDirection.horizontal,
                               ),
                             );
-                            return;
-                          } finally {
-                            Navigator.of(context).pop();
                           }
                         },
                         child: Row(
@@ -368,7 +369,13 @@ class LinkTile extends StatelessWidget {
 class MyLinksListview extends StatelessWidget {
   final List<KzLink> links;
 
-  const MyLinksListview({super.key, required this.links});
+  final Function onRefresh;
+
+  const MyLinksListview({
+    super.key,
+    required this.links,
+    required this.onRefresh,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -381,7 +388,10 @@ class MyLinksListview extends StatelessWidget {
     return ListView.builder(
       itemCount: links.length,
       itemBuilder: (context, index) {
-        return LinkTile(link: links[index]);
+        return LinkTile(
+          link: links[index],
+          refresh: onRefresh,
+        );
       },
     );
   }

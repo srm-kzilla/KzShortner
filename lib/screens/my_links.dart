@@ -49,6 +49,9 @@ class _MyLinksState extends State<MyLinks> {
                     Expanded(
                       child: MyLinksListview(
                         links: snapshot.data!,
+                        onRefresh: () {
+                          links = KzApi.getLinks();
+                        },
                       ),
                     ),
                   ],
