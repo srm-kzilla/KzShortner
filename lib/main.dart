@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:kzlinks/screens/home.dart';
-import 'package:kzlinks/utils/flutter_init_sdk.dart';
-import 'package:kzlinks/screens/home_screen.dart';
 
+import 'package:flutter/material.dart';
+import 'package:kzlinks/screens/home_screen.dart';
+import 'package:kzlinks/screens/my_links.dart';
+import 'package:kzlinks/utils/flutter_init_sdk.dart';
 
 void main() {
   runZonedGuarded(
@@ -22,11 +22,10 @@ void run() async {
     MaterialApp(
       title: 'KzLinks',
       theme: ThemeData.light(useMaterial3: true),
-      // darkTheme: ThemeData.dark(useMaterial3: true),
-
-      home: const HomeScreen(),
-
-      debugShowCheckedModeBanner: false,
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/my_links': (context) => const MyLinks(),
+      },
     ),
   );
 }
