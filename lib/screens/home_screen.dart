@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kzlinks/model/link.dart';
+import 'package:kzlinks/screens/result_screen.dart';
+import 'package:kzlinks/services/api_services.dart';
+import 'package:kzlinks/utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,7 +12,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController shortCodeController = TextEditingController();
+  TextEditingController linkIdController = TextEditingController();
   bool isCustomise = false;
+  late Future<List<KzLink>> links;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         GestureDetector(
           onTap: () {
             setState(() {
+              shortCodeController.clear();
               isCustomise = !isCustomise;
             });
           },
@@ -74,22 +83,68 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Spacer(),
-        Container(
-          width: 170,
-          height: 68,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12), color: Colors.black),
-          child: const Column(
-            children: [
-              Padding(padding: EdgeInsets.only(top: 21)),
-              Text(
-                'SHRINK',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
+        GestureDetector(
+          onTap: () async {
+            // Call the makeApiRequest function when "SHRINK" button is tapped
+            try {
+              final linkId = linkIdController.text.trim();
+              final shortCode = shortCodeController.text.trim();
+              if (linkId.isEmpty || !linkRegex.hasMatch(linkId)) {
+                throw Exception('Please enter a valid URL');
+              }
+              if (isCustomise &&
+                  (shortCode.isEmpty || !shortCodeRegex.hasMatch(shortCode))) {
+                throw Exception('Please enter a valid shortcode');
+              }
+              final link = await KzApi.createShortLink(
+                  linkId, isCustomise ? shortCode : null);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ResultScreen(
+                    shortenedLink: link.shortCode,
+                    analyticsCode: link.analyticsCode,
+                    yourLink: link.longUrl,
+                  ),
+                ),
+              );
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content:
+                      Text(e.toString().replaceAll('Exception:', '').trim()),
+                  backgroundColor: Colors.red.shade600,
+                  duration: const Duration(seconds: 2, milliseconds: 500),
+                  showCloseIcon: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
+                  dismissDirection: DismissDirection.horizontal,
+                ),
+              );
+            }
+          },
+          child: Container(
+            width: 170,
+            height: 68,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12), color: Colors.black),
+            child: const Column(
+              children: [
+                Padding(padding: EdgeInsets.only(top: 21)),
+                Text(
+                  'SHRINK',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -123,8 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
             color: const Color(0xffF5F5F5),
             borderRadius: BorderRadius.circular(19)),
-        child: const TextField(
-          decoration: InputDecoration(
+        child: TextField(
+          controller: shortCodeController,
+          decoration: const InputDecoration(
               contentPadding: EdgeInsets.only(top: 15),
               border: InputBorder.none,
               hintText: 'Enter custom code...',
@@ -141,8 +197,9 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
           color: const Color(0xffF5F5F5),
           borderRadius: BorderRadius.circular(19)),
-      child: const TextField(
-        decoration: InputDecoration(
+      child: TextField(
+        controller: linkIdController,
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.only(top: 15),
           border: InputBorder.none,
           hintText: 'Enter your link here...',
@@ -150,6 +207,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    linkIdController.dispose();
+    shortCodeController.dispose(); // Dispose of the controller when done
+    super.dispose();
   }
 
   AppBar _buildAppBar() {
