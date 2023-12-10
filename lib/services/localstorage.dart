@@ -10,7 +10,7 @@ class LinkStorageService {
   static Future<List<String>> getLinkIds() async {
     final linkIds = await _storage.read('linkIds');
     if (linkIds == null) {
-      return ["OczlQXMGUQnE"];
+      return [];
     } else {
       return linkIds.split(',');
     }
