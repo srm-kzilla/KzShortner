@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kzlinks/components/my_links_listview.dart';
@@ -32,6 +33,7 @@ class _MyLinksState extends State<MyLinks> {
         child: RefreshIndicator(
           onRefresh: () {
             links = KzApi.getLinks();
+            setState(() {});
             return links;
           },
           child: FutureBuilder(
@@ -51,12 +53,17 @@ class _MyLinksState extends State<MyLinks> {
                         links: snapshot.data!,
                         onRefresh: () {
                           links = KzApi.getLinks();
+                          setState(() {});
                         },
                       ),
                     ),
                   ],
                 );
               } else if (snapshot.hasError) {
+                debugPrint((snapshot.error as DioException)
+                    .response!
+                    .statusCode
+                    .toString()!);
                 return ListView(
                   children: [
                     Column(
@@ -73,11 +80,11 @@ class _MyLinksState extends State<MyLinks> {
                           'Failed to load links!',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        const SizedBox(height: 20),
-                        Text(
-                          '${snapshot.error}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
+                        // const SizedBox(height: 20),
+                        // Text(
+                        //   '${snapshot.error}',
+                        //   style: Theme.of(context).textTheme.bodyLarge,
+                        // ),
                       ],
                     ),
                   ],

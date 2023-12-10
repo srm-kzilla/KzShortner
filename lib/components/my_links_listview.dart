@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kzlinks/components/qr_dialog.dart';
@@ -180,6 +181,25 @@ class LinkTile extends StatelessWidget {
                                   await KzApi.updateLink(
                                     link.copyWith(longUrl: url),
                                   );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: const Text('Link Updated'),
+                                      backgroundColor: Colors.green.shade600,
+                                      duration: const Duration(
+                                          seconds: 2, milliseconds: 500),
+                                      showCloseIcon: true,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      behavior: SnackBarBehavior.floating,
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 20,
+                                      ),
+                                      dismissDirection:
+                                          DismissDirection.horizontal,
+                                    ),
+                                  );
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -324,11 +344,32 @@ class LinkTile extends StatelessWidget {
                             await KzApi.disableOrEnableLink(
                               link.copyWith(enabled: !link.enabled),
                             );
-                            refresh();
-                          } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: const Text('Failed to delete link!'),
+                                content: Text(
+                                    '${!link.enabled ? "Enabled" : "Disbaled"} link!'),
+                                backgroundColor: Colors.green.shade600,
+                                duration: const Duration(
+                                    seconds: 2, milliseconds: 500),
+                                showCloseIcon: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 20,
+                                ),
+                                dismissDirection: DismissDirection.horizontal,
+                              ),
+                            );
+                            refresh();
+                          } catch (e) {
+                            debugPrint((e as DioException).response!.data!);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Failed to ${link.enabled ? "disable" : "enable"} link!'),
                                 backgroundColor: Colors.red.shade600,
                                 duration: const Duration(
                                     seconds: 2, milliseconds: 500),
@@ -348,7 +389,9 @@ class LinkTile extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            const Icon(Icons.delete),
+                            Icon(link.enabled
+                                ? Icons.toggle_off
+                                : Icons.toggle_on),
                             const SizedBox(width: 8),
                             Text(link.enabled ? 'Disable' : 'Enable'),
                           ],
