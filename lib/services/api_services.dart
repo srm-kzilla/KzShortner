@@ -53,9 +53,9 @@ class KzApi {
   }
 
   static Future<KzLink> createShortLink(
-      String linkId, String? shortCode) async {
+      String longUrl, String? shortCode) async {
     final linkIds = await LinkStorageService.getLinkIds();
-    Map<String, dynamic> data = {"linkId": linkId, "linkIds": linkIds};
+    Map<String, dynamic> data = {"longUrl": longUrl, "linkIds": linkIds};
 
     if (shortCode != null) {
       data["shortCode"] = shortCode;

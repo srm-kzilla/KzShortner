@@ -2,6 +2,6 @@ import 'package:dio/dio.dart';
 
 final dio = Dio(
   BaseOptions(
-    baseUrl: 'http://kzilla.xyz/api/v1/app',
+    baseUrl: 'https://web-production-3ba2.up.railway.app/api/v1/app/',
   ),
 );

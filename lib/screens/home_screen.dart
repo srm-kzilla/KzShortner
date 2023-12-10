@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kzlinks/model/link.dart';
 import 'package:kzlinks/screens/result_screen.dart';
@@ -107,7 +108,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               );
-            } catch (e) {
+            } on DioException {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Failed to create short link"),
+                  backgroundColor: Colors.red.shade600,
+                  duration: const Duration(seconds: 2, milliseconds: 500),
+                  showCloseIcon: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
+                  dismissDirection: DismissDirection.horizontal,
+                ),
+              );
+            } on Exception catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content:
