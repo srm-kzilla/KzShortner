@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } on DioException catch (e) {
-              print(e.response!.data);
+              debugPrint(e.response!.data);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text("Failed to create short link"),
