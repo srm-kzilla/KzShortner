@@ -64,8 +64,10 @@ class _MyLinksState extends State<MyLinks> {
                     .response!
                     .statusCode
                     .toString()!);
-                
-                if (snapshot.error is DioException && snapshot.error.response!.statusCode == 404) {
+
+                if (snapshot.error is DioException &&
+                    (snapshot.error as DioException).response!.statusCode ==
+                        404) {
                   return const Center(
                     child: Text('No links found!'),
                   );

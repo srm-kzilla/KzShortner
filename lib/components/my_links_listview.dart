@@ -347,7 +347,7 @@ class LinkTile extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                    '${!link.enabled ? "Enabled" : "Disbaled"} link!'),
+                                    '${!link.enabled ? "Enabled" : "Disabled"} link!'),
                                 backgroundColor: Colors.green.shade600,
                                 duration: const Duration(
                                     seconds: 2, milliseconds: 500),

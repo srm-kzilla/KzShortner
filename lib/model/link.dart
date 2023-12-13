@@ -54,3 +54,42 @@ class KzLink {
     );
   }
 }
+
+class KzNewLink {
+  final String linkId;
+  final String shortCode;
+  final String analyticsCode;
+
+  final String longUrl;
+
+  KzNewLink(
+      {required this.linkId,
+      required this.shortCode,
+      required this.analyticsCode,
+      required this.longUrl});
+
+  factory KzNewLink.fromJson(Map<String, dynamic> json) {
+    return KzNewLink(
+        linkId: json['linkId'],
+        shortCode: json['shortCode'],
+        analyticsCode: json['analyticsCode'],
+        longUrl: json['longUrl']);
+  }
+
+  KzNewLink copyWith({
+    String? linkId,
+    String? shortCode,
+    String? analyticsCode,
+    int? clicks,
+    String? creatorIpAddress,
+    bool? enabled,
+    String? longUrl,
+    int? timestamp,
+  }) {
+    return KzNewLink(
+        linkId: linkId ?? this.linkId,
+        shortCode: shortCode ?? this.shortCode,
+        analyticsCode: analyticsCode ?? this.analyticsCode,
+        longUrl: longUrl ?? this.longUrl);
+  }
+}

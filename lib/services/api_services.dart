@@ -48,13 +48,13 @@ class KzApi {
     }
   }
 
-  static Future<KzLink> createShortLink(
+  static Future<KzNewLink> createShortLink(
       String longUrl, String? shortCode) async {
     final linkIds = await LinkStorageService.getLinkIds();
     Map<String, dynamic> data = {"longUrl": longUrl, "linkIds": linkIds};
 
     if (shortCode != null) {
-      data["shortCode"] = shortCode;
+      data["customCode"] = shortCode;
     }
     print(data);
     final res = await dio.post("/", data: data);
@@ -64,7 +64,9 @@ class KzApi {
     if (res.statusCode != 201) {
       throw Exception("Failed to create link");
     }
-    await LinkStorageService.updateLinks(res.data["linkIds"]);
-    return KzLink.fromJson(res.data);
+    await LinkStorageService.updateLinks((res.data["linkIds"] as List<dynamic>)
+        .map((e) => e.toString())
+        .toList());
+    return KzNewLink.fromJson(res.data["link"]);
   }
 }
