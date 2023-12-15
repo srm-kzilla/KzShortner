@@ -21,6 +21,7 @@ void run() async {
   runApp(
     MaterialApp(
       title: 'KzLinks',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true),
       routes: {
         '/': (context) => const HomeScreen(),
