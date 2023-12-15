@@ -4,7 +4,7 @@ import 'package:kzlinks/services/localstorage.dart';
 import "package:kzlinks/utils/fetcher.dart";
 
 class KzApi {
-  static Future<KzLink> disableOrEnableLink(KzLink link) async {
+  static Future<void> disableOrEnableLink(KzLink link) async {
     final res = await dio.put("/", data: {
       "linkId": link.linkId,
       "enabled": link.enabled,
@@ -15,8 +15,6 @@ class KzApi {
     if (res.statusCode != 200) {
       throw Exception("Failed to disable link");
     }
-
-    return KzLink.fromJson(res.data);
   }
 
   static Future<List<KzLink>> getLinks() async {
@@ -25,7 +23,7 @@ class KzApi {
     debugPrint("linkIds: $linkIds");
 
     final res = await dio.get("/me", data: {
-      linkIds,
+      "linkIds": linkIds,
     });
 
     debugPrint("res: ${res.data}");
@@ -37,19 +35,39 @@ class KzApi {
     return [];
   }
 
-  static Future<KzLink> updateLink(KzLink link) async {
+  static Future<void> updateLink(KzLink link) async {
     final res = await dio.put("/", data: {
       "linkId": link.linkId,
       "longUrl": link.longUrl,
     });
 
-    debugPrint("res: ${res.data}");
+    debugPrint("res: ${res.statusCode}");
 
     if (res.statusCode != 200) {
       throw Exception("Failed to update link");
     }
+  }
 
-    return KzLink.fromJson(res.data);
+  static Future<KzNewLink> createShortLink(
+      String longUrl, String? shortCode) async {
+    final linkIds = await LinkStorageService.getLinkIds();
+    Map<String, dynamic> data = {"longUrl": longUrl, "linkIds": linkIds};
+
+    if (shortCode != null) {
+      data["customCode"] = shortCode;
+    }
+    print(data);
+    final res = await dio.post("/", data: data);
+
+    debugPrint("res: ${res.data}");
+
+    if (res.statusCode != 201) {
+      throw Exception("Failed to create link");
+    }
+    await LinkStorageService.updateLinks((res.data["linkIds"] as List<dynamic>)
+        .map((e) => e.toString())
+        .toList());
+    return KzNewLink.fromJson(res.data["link"]);
   }
   static Future<Analytics?> getAnalytics(String analyticCode) async {
     try {
