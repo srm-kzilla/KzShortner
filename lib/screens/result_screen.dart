@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // For clipboard functionality
+import 'package:flutter/services.dart';
+import 'package:kzlinks/components/qr_dialog.dart';
+import 'package:kzlinks/screens/analytic_screen.dart'; // For clipboard functionality
 
 class ResultScreen extends StatefulWidget {
   final String shortenedLink;
-  final String analyticsLink;
+  final String analyticsCode;
   final String yourLink;
 
   const ResultScreen({
     Key? key,
     required this.shortenedLink,
-    required this.analyticsLink,
+    required this.analyticsCode,
     required this.yourLink,
   }) : super(key: key);
 
@@ -71,12 +73,12 @@ class _HomeScreenState extends State<ResultScreen> {
             ),
             child: const Column(
               children: [
-                Padding(padding: EdgeInsets.only(bottom: 15)),
+                Padding(padding: EdgeInsets.only(top: 21)),
                 Text(
-                  'Shrink Another \nURL',
+                  'Go Back',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -85,25 +87,31 @@ class _HomeScreenState extends State<ResultScreen> {
           ),
         ),
         const Spacer(),
-        Container(
-          width: 170,
-          height: 68,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.black,
+        GestureDetector(
+          onTap: () async => await showQRDialog(
+            context,
+            widget.shortenedLink,
           ),
-          child: const Column(
-            children: [
-              Padding(padding: EdgeInsets.only(top: 21)),
-              Text(
-                'QR Code',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+          child: Container(
+            width: 170,
+            height: 68,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.black,
+            ),
+            child: const Column(
+              children: [
+                Padding(padding: EdgeInsets.only(top: 21)),
+                Text(
+                  'QR Code',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -145,7 +153,7 @@ class _HomeScreenState extends State<ResultScreen> {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(top: 15),
                 border: InputBorder.none,
-                hintText: widget.analyticsLink,
+                hintText: widget.analyticsCode,
                 hintStyle: const TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
                   fontSize: 26,
@@ -155,7 +163,15 @@ class _HomeScreenState extends State<ResultScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.analytics),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AnalyticScreen(
+                    analyticCode: widget.analyticsCode,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -231,37 +247,40 @@ class _HomeScreenState extends State<ResultScreen> {
       elevation: 0,
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          //Padding(padding: EdgeInsets.only(left: 0)),
           const Image(
-            image: ResizeImage(AssetImage('assets/icon.png'),
-                width: 50, height: 50),
-          ),
-          const SizedBox(
-            width: 200,
-          ),
-          Container(
-            height: 50,
-            width: 100,
-            padding: const EdgeInsets.only(bottom: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.black,
-            ),
-            child: const Column(
-              children: [
-                Padding(padding: EdgeInsets.only(top: 14)),
-                Text(
-                  'My Files',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
+              image: ResizeImage(AssetImage('assets/icon.png'),
+                  width: 50, height: 50)),
+
+          // to add space between the two objects in appbar
+
+          GestureDetector(
+              child: Container(
+                height: 50,
+                width: 100,
+                padding: const EdgeInsets.only(bottom: 5),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.black),
+                child: const Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 14)),
+                    Text(
+                      'My Links',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/my_links');
+              })
         ],
       ),
     );
