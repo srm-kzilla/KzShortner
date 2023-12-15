@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:kzlinks/model/link.dart';
 
 class ScrollableListViewWidget extends StatelessWidget {
-  final String title;
-  final List<String> items;
-  const ScrollableListViewWidget(this.title, this.items, {super.key});
+  final Report report;
+  const ScrollableListViewWidget(this.report, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    final title = report.name;
+    final List<ReportData> items = report.data;
+    final total = report.total;
+    const List<Color> progressColors = [
+      Colors.blue,
+      Colors.red,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+    ];
     return Container(
       decoration: BoxDecoration(
         color: const Color.fromRGBO(245, 245, 245, 2),
@@ -42,11 +52,17 @@ class ScrollableListViewWidget extends StatelessWidget {
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(items[index]),
-                    subtitle: const LinearProgressIndicator(
-                      value: 0.5,
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(items[index].label),
+                        Text('${items[index].value}'), // Adjust this line as needed
+                      ],
+                    ),
+                    subtitle: LinearProgressIndicator(
+                      value: items[index].value / total,
                       backgroundColor: Colors.grey,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      valueColor: AlwaysStoppedAnimation<Color>(progressColors[index % progressColors.length]),
                     ),
                   );
                 },

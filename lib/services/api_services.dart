@@ -51,4 +51,19 @@ class KzApi {
 
     return KzLink.fromJson(res.data);
   }
+  static Future<Analytics?> getAnalytics(String analyticCode) async {
+    try {
+      final res = await analyticDio.get("/analytics/$analyticCode");
+      if (res.statusCode == 200) {
+        final jsonData = res.data;
+        return Analytics.fromJson(jsonData);
+      } else {
+        debugPrint("Failed to fetch data: ${res}");
+        return null;
+      }
+    } catch (e) {
+      debugPrint("Error while fetching data: $e");
+      return null;
+    }
+  }
 }
