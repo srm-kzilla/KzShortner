@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kzlinks/model/analytics.dart';
 import 'package:kzlinks/model/link.dart';
 import 'package:kzlinks/services/localstorage.dart';
 import "package:kzlinks/utils/fetcher.dart";
 
+
 class KzApi {
   static Future<void> disableOrEnableLink(KzLink link) async {
-    final res = await dio.put("/", data: {
+    final res = await dio.put("/app", data: {
       "linkId": link.linkId,
       "enabled": link.enabled,
     });
@@ -22,7 +24,7 @@ class KzApi {
 
     debugPrint("linkIds: $linkIds");
 
-    final res = await dio.get("/me", data: {
+    final res = await dio.get("/app/me", data: {
       "linkIds": linkIds,
     });
 
@@ -36,7 +38,7 @@ class KzApi {
   }
 
   static Future<void> updateLink(KzLink link) async {
-    final res = await dio.put("/", data: {
+    final res = await dio.put("/app", data: {
       "linkId": link.linkId,
       "longUrl": link.longUrl,
     });
@@ -57,7 +59,7 @@ class KzApi {
       data["customCode"] = shortCode;
     }
     print(data);
-    final res = await dio.post("/", data: data);
+    final res = await dio.post("/app", data: data);
 
     debugPrint("res: ${res.data}");
 
@@ -71,7 +73,7 @@ class KzApi {
   }
   static Future<Analytics?> getAnalytics(String analyticCode) async {
     try {
-      final res = await analyticDio.get("/analytics/$analyticCode");
+      final res = await dio.get("/analytics/$analyticCode");
       if (res.statusCode == 200) {
         final jsonData = res.data;
         return Analytics.fromJson(jsonData);

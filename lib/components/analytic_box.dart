@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kzlinks/model/link.dart';
+import 'package:kzlinks/model/analytics.dart';
 
 class ScrollableListViewWidget extends StatelessWidget {
   final Report report;
