@@ -1,21 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:kzlinks/components/analytic_box.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kzlinks/model/analytics.dart';
+import 'package:kzlinks/services/api_services.dart';
 
 class AnalyticScreen extends StatelessWidget {
   final String analyticCode;
-  const AnalyticScreen({required this.analyticCode,super.key});
+  const AnalyticScreen({required this.analyticCode, super.key});
 
   @override
   Widget build(BuildContext context) {
-    //fetch data this data
-    Map<String, List<String>> data = {
-      'Operating Systems': ['Windows', 'Mac', 'Linux', 'Android', 'iOS'],
-      'Browsers': ['Chrome', 'Firefox', 'Safari', 'Edge', 'Opera'],
-      'locations': ['India', 'USA', 'UK', 'Canada', 'Australia'],
-    };
-    const clicks = '4100';
-    const link = 'https://kzilla.xyz/';
+    return FutureBuilder<Analytics?>(
+      future: KzApi.getAnalytics(analyticCode),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Loading state
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          // Error state
+          return Scaffold(
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          // No data state
+          return const Scaffold(
+            body: Center(
+              child: Text('No analytics data available.'),
+            ),
+          );
+        } else {
+          // Data loaded successfully
+          Analytics analytics = snapshot.data!;
+          return buildAnalyticScreen(analytics);
+        }
+      },
+    );
+  }
+
+  Widget buildAnalyticScreen(Analytics analytics) {
+    final clicks = '${analytics.clicks}';
+    final link = 'https://kzilla.xyz/${analytics.shortCode}';
+    final reports = analytics.reports;
+
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -25,53 +57,53 @@ class AnalyticScreen extends StatelessWidget {
                     width: 50, height: 50)),
           ],
         ),
-        actions: [
-          PopupMenuButton(
-              icon: Container(
-                  height: 50,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.black),
-                  child: const Center(
-                    child: Text(
-                      'My Files',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )),
-              itemBuilder: (context) {
-                return [
-                  const PopupMenuItem<int>(
-                    value: 0,
-                    child: Text("All Time"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 1,
-                    child: Text("Today"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 2,
-                    child: Text("Last 3 Days"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 3,
-                    child: Text("This Week"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 4,
-                    child: Text("This Month"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 5,
-                    child: Text("Custom"),
-                  ),
-                ];
-              },
-              onSelected: (value) {}),
-        ],
+        // actions: [
+        //   PopupMenuButton(
+        //       icon: Container(
+        //           height: 50,
+        //           width: 100,
+        //           decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.circular(12),
+        //               color: Colors.black),
+        //           child: const Center(
+        //             child: Text(
+        //               'All Time',
+        //               style: TextStyle(
+        //                   color: Colors.white,
+        //                   fontSize: 17,
+        //                   fontWeight: FontWeight.bold),
+        //             ),
+        //           )),
+        //       itemBuilder: (context) {
+        //         return [
+        //           const PopupMenuItem<int>(
+        //             value: 0,
+        //             child: Text("All Time"),
+        //           ),
+        //           const PopupMenuItem<int>(
+        //             value: 1,
+        //             child: Text("Today"),
+        //           ),
+        //           const PopupMenuItem<int>(
+        //             value: 2,
+        //             child: Text("Last 3 Days"),
+        //           ),
+        //           const PopupMenuItem<int>(
+        //             value: 3,
+        //             child: Text("This Week"),
+        //           ),
+        //           const PopupMenuItem<int>(
+        //             value: 4,
+        //             child: Text("This Month"),
+        //           ),
+        //           const PopupMenuItem<int>(
+        //             value: 5,
+        //             child: Text("Custom"),
+        //           ),
+        //         ];
+        //       },
+        //       onSelected: (value) {}),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20), // Add padding to the widget
@@ -112,10 +144,10 @@ class AnalyticScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               link,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 17,
                               ),
@@ -133,12 +165,12 @@ class AnalyticScreen extends StatelessWidget {
                           width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color: Colors.black),
-                          child: const Center(
+                              color: const Color.fromRGBO(0, 0, 0, 1)),
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text(
+                                const Text(
                                   'Clicks',
                                   style: TextStyle(
                                       color: Colors.white,
@@ -147,7 +179,7 @@ class AnalyticScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   clicks,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
@@ -159,13 +191,12 @@ class AnalyticScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: data.length,
+                      itemCount: reports.length,
                       itemBuilder: (context, index) {
+                        Report report = reports[index];
                         return Padding(
                             padding: const EdgeInsets.all(10),
-                            child: ScrollableListViewWidget(
-                                data.keys.toList()[index],
-                                data.values.toList()[index]));
+                            child: ScrollableListViewWidget(report));
                       },
                     ),
                   ),

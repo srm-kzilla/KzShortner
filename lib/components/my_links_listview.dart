@@ -365,7 +365,7 @@ class LinkTile extends StatelessWidget {
                             );
                             refresh();
                           } catch (e) {
-                            debugPrint((e as DioException).response!.data!);
+                            debugPrint("${(e as DioException).response!.data!}");
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(

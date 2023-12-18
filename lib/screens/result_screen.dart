@@ -64,6 +64,9 @@ class _HomeScreenState extends State<ResultScreen> {
       children: [
         const Padding(padding: EdgeInsets.only(top: 110, left: 6)),
         GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
           child: Container(
             width: 170,
             height: 68,

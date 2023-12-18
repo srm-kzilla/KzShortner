@@ -109,10 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } on DioException catch (e) {
-              debugPrint(e.response!.data);
+              debugPrint("${e.response!.data}");
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("Failed to create short link"),
+                  content: Text(e.response?.statusCode!=409?"Failed to create short link":"Shortcode already exists"),
                   backgroundColor: Colors.red.shade600,
                   duration: const Duration(seconds: 2, milliseconds: 500),
                   showCloseIcon: true,
