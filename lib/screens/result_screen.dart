@@ -220,7 +220,7 @@ class _HomeScreenState extends State<ResultScreen> {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(top: 15),
                 border: InputBorder.none,
-                hintText: widget.shortenedLink,
+                hintText: "https://kzilla.xyz/" + widget.shortenedLink,
                 hintStyle: const TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
                   fontSize: 28,
@@ -231,7 +231,7 @@ class _HomeScreenState extends State<ResultScreen> {
           IconButton(
             icon: const Icon(Icons.copy),
             onPressed: () {
-              final textToCopy = widget.shortenedLink;
+              final textToCopy = "https://kzilla.xyz/" + widget.shortenedLink;
               Clipboard.setData(ClipboardData(text: textToCopy));
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
