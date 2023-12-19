@@ -35,6 +35,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         with:
           allowUpdates: true
+          name: "KzShortner ${{ github.ref_name }}"
+          body: "Check the assets for the APK."
           artifacts: "build/app/outputs/apk/release/*.apk"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
