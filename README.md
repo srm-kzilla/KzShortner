@@ -1,6 +1,6 @@
-# kzlinks
+# KzShortner
 
-A new Flutter project.
+Shorten the URL. Broaden the reach.
 
 ## How to create a release
 
