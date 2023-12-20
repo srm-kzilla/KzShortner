@@ -33,18 +33,24 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
+      body: Stack(
+        children: [
+          Center(
+            child: Image.asset(
               'assets/icon.png',
               width: 200,
               height: 200,
-            )
-          ],
-        ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text('crafted with ❤️ by your friends at SRMKZILLA team',
+                  style: TextStyle(fontSize: 14)),
+            ),
+          ),
+        ],
       ),
     );
   }
