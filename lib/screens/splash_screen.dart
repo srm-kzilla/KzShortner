@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/kz_logo.png',
+              'assets/icon.png',
               width: 200,
               height: 200,
             )

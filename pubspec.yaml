@@ -54,7 +54,7 @@ flutter_launcher_icons:
   android:
     adaptive_icon_background: "#ffffff"
   ios: true
-  image_path: "assets/kz_logo.png"
+  image_path: "assets/icon.png"
   remove_alpha_ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
