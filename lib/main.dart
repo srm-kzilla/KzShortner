@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:kzlinks/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:kzlinks/screens/home_screen.dart';
 import 'package:kzlinks/screens/my_links.dart';
@@ -24,7 +24,9 @@ void run() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true),
       routes: {
-        '/': (context) => const HomeScreen(),
+        //'/splash': (context) => const SplashScreen(),
+        '/': (context) => const SplashScreen(),
+        '/home': (context) => const HomeScreen(),
         '/my_links': (context) => const MyLinks(),
       },
     ),
