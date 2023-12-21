@@ -134,6 +134,14 @@ class LinkTile extends StatelessWidget {
                                     SnackBar(
                                       content: const Text(
                                           'Please enter a different URL'),
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom,
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.03),
                                       backgroundColor: Colors.red.shade600,
                                       duration: const Duration(
                                           seconds: 2, milliseconds: 500),
@@ -158,6 +166,14 @@ class LinkTile extends StatelessWidget {
                                     SnackBar(
                                       content: const Text(
                                           'Please enter a valid URL'),
+                                      padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom,
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.03),
                                       backgroundColor: Colors.red.shade600,
                                       duration: const Duration(
                                           seconds: 2, milliseconds: 500),
@@ -365,7 +381,8 @@ class LinkTile extends StatelessWidget {
                             );
                             refresh();
                           } catch (e) {
-                            debugPrint("${(e as DioException).response!.data!}");
+                            debugPrint(
+                                "${(e as DioException).response!.data!}");
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(

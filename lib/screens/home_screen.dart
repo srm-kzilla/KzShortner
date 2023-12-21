@@ -95,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               if (isCustomise &&
                   (shortCode.isEmpty || !shortCodeRegex.hasMatch(shortCode))) {
-                throw Exception('Please enter a valid shortcode');
+                throw Exception(
+                    'Please enter a valid shortcode of minimum 4 alphanumeric characters');
               }
               final link = await KzApi.createShortLink(
                   linkId, isCustomise ? shortCode : null);
@@ -112,7 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
               debugPrint("${e.response!.data}");
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(e.response?.statusCode!=409?"Failed to create short link":"Shortcode already exists"),
+                  content: Text(e.response?.statusCode != 409
+                      ? "Failed to create short link"
+                      : "Shortcode already exists"),
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                      left: MediaQuery.of(context).size.width * 0.03),
                   backgroundColor: Colors.red.shade600,
                   duration: const Duration(seconds: 2, milliseconds: 500),
                   showCloseIcon: true,
@@ -132,6 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 SnackBar(
                   content:
                       Text(e.toString().replaceAll('Exception:', '').trim()),
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                      left: MediaQuery.of(context).size.width * 0.03),
                   backgroundColor: Colors.red.shade600,
                   duration: const Duration(seconds: 2, milliseconds: 500),
                   showCloseIcon: true,
