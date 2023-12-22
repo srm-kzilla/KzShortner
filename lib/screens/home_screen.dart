@@ -95,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               if (isCustomise &&
                   (shortCode.isEmpty || !shortCodeRegex.hasMatch(shortCode))) {
-                throw Exception('Please enter a valid shortcode');
+                throw Exception(
+                    'Please enter a valid shortcode of minimum 4 alphanumeric characters');
               }
               final link = await KzApi.createShortLink(
                   linkId, isCustomise ? shortCode : null);
@@ -112,7 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
               debugPrint("${e.response!.data}");
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(e.response?.statusCode!=409?"Failed to create short link":"Shortcode already exists"),
+                  content: Text(e.response?.statusCode != 409
+                      ? "Failed to create short link"
+                      : "Shortcode already exists"),
                   backgroundColor: Colors.red.shade600,
                   duration: const Duration(seconds: 2, milliseconds: 500),
                   showCloseIcon: true,
@@ -139,10 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   behavior: SnackBarBehavior.floating,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 20,
-                  ),
+                  margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                      left: 20,
+                      right: 20),
                   dismissDirection: DismissDirection.horizontal,
                 ),
               );
@@ -193,20 +196,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Visibility(
       visible: isCustomise,
       child: Container(
-        height: 65,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-            color: const Color(0xffF5F5F5),
-            borderRadius: BorderRadius.circular(19)),
-        child: TextField(
-          controller: shortCodeController,
-          decoration: const InputDecoration(
-              contentPadding: EdgeInsets.only(top: 15),
-              border: InputBorder.none,
-              hintText: 'Enter custom code...',
-              hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 26)),
-        ),
-      ),
+          height: 65,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+              color: const Color(0xffF5F5F5),
+              borderRadius: BorderRadius.circular(19)),
+          child: TextField(
+            controller: shortCodeController,
+            decoration: const InputDecoration(
+                contentPadding: EdgeInsets.only(top: 15),
+                border: InputBorder.none,
+                hintText: 'Enter custom code...',
+                hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 26)),
+          )),
     );
   }
 
