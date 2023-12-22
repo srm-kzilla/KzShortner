@@ -348,7 +348,7 @@ class LinkTile extends StatelessWidget {
                               SnackBar(
                                 content: Text(
                                     '${!link.enabled ? "Enabled" : "Disabled"} link!'),
-                                backgroundColor: Colors.green.shade600,
+                                backgroundColor: link.enabled? Colors.red.shade600 : Colors.green.shade600,
                                 duration: const Duration(
                                     seconds: 2, milliseconds: 500),
                                 showCloseIcon: true,
@@ -365,7 +365,8 @@ class LinkTile extends StatelessWidget {
                             );
                             refresh();
                           } catch (e) {
-                            debugPrint("${(e as DioException).response!.data!}");
+                            debugPrint(
+                                "${(e as DioException).response!.data!}");
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
@@ -389,9 +390,9 @@ class LinkTile extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            Icon(link.enabled
-                                ? Icons.toggle_off
-                                : Icons.toggle_on),
+                            link.enabled
+                                ? Icon(Icons.toggle_on,color: Colors.green.shade600)
+                                : Icon(Icons.toggle_off,color: Colors.red.shade600),
                             const SizedBox(width: 8),
                             Text(link.enabled ? 'Disable' : 'Enable'),
                           ],
