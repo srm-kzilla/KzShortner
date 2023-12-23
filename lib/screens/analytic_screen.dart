@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kzlinks/components/analytic_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kzlinks/model/analytics.dart';
@@ -57,6 +58,37 @@ class AnalyticScreen extends StatelessWidget {
                     width: 50, height: 50)),
           ],
         ),
+        actions: [
+          PopupMenuButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  onTap: () {
+                    Clipboard.setData(
+                      ClipboardData(
+                        text: "https://kzilla.xyz/analytics/${analyticCode}",
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Analytic code copied to clipboard'),
+                      ),
+                    );
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.share, color: Colors.black),
+                      SizedBox(width: 10),
+                      Text('Share Analytics'),
+                    ],
+                  ),
+                ),
+              ];
+            },
+          )
+        ],
         // actions: [
         //   PopupMenuButton(
         //       icon: Container(
