@@ -153,16 +153,31 @@ class _HomeScreenState extends State<ResultScreen> {
           Expanded(
             child: TextField(
               readOnly: true,
+              textAlign: TextAlign.center,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 15),
+                contentPadding: const EdgeInsets.symmetric(vertical: 15),
                 border: InputBorder.none,
-                hintText: widget.analyticsCode,
+                hintText:
+                    "https://kzilla.xyz/analytics/" + widget.analyticsCode,
                 hintStyle: const TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 26,
+                  fontSize: 20,
                 ),
               ),
             ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.copy),
+            onPressed: () {
+              final textToCopy =
+                  "https://kzilla.xyz/analytics/" + widget.analyticsCode;
+              Clipboard.setData(ClipboardData(text: textToCopy));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Analytic code copied to clipboard'),
+                ),
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.analytics),
@@ -192,12 +207,12 @@ class _HomeScreenState extends State<ResultScreen> {
       child: TextField(
         readOnly: true,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(top: 15),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           border: InputBorder.none,
           hintText: widget.yourLink,
           hintStyle: const TextStyle(
             color: Color.fromARGB(255, 0, 0, 0),
-            fontSize: 26,
+            fontSize: 20,
           ),
         ),
       ),
@@ -218,12 +233,12 @@ class _HomeScreenState extends State<ResultScreen> {
             child: TextField(
               readOnly: true,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(top: 15),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
                 border: InputBorder.none,
                 hintText: "https://kzilla.xyz/" + widget.shortenedLink,
                 hintStyle: const TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 28,
+                  fontSize: 20,
                 ),
               ),
             ),
