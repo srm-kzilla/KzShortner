@@ -111,7 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               if (isCustomise &&
                   (shortCode.isEmpty || !shortCodeRegex.hasMatch(shortCode))) {
-                throw Exception('Please enter a valid shortcode');
+                throw Exception(
+                    'Please enter a valid shortcode of minimum 4 alphanumeric characters');
               }
               final link = await KzApi.createShortLink(
                   linkId, isCustomise ? shortCode : null);
@@ -160,10 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   behavior: SnackBarBehavior.floating,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 20,
-                  ),
+                  margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                      left: 20,
+                      right: 20),
                   dismissDirection: DismissDirection.horizontal,
                 ),
               );
