@@ -139,7 +139,7 @@ class AnalyticScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20), // Add padding to the widget
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text(
             'Analytics',
             style: TextStyle(
