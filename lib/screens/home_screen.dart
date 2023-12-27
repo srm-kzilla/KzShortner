@@ -38,9 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             searchBox(),
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
             customsearchBox(),
+            const SizedBox(
+              height: 10,
+            ),
             buttons(),
             const Spacer(
               flex: 2,
@@ -69,11 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 68,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12), color: Colors.black),
-            child: const Column(
+            child: Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 21)),
                 Text(
-                  'Customise',
+                  !isCustomise ? 'Customise' : 'Randomise',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -86,6 +89,30 @@ class _HomeScreenState extends State<HomeScreen> {
         const Spacer(),
         GestureDetector(
           onTap: () async {
+            showDialog(
+              // Show a loading dialog
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Dialog(
+                  child: SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(width: 16),
+                            Text("Creating short link..."),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
             // Call the makeApiRequest function when "SHRINK" button is tapped
             try {
               final linkId = linkIdController.text.trim();
@@ -100,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               final link = await KzApi.createShortLink(
                   linkId, isCustomise ? shortCode : null);
+              Navigator.of(context).pop(); // Close the loading dialog
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ResultScreen(
@@ -110,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } on DioException catch (e) {
+              Navigator.of(context).pop(); // Close the loading dialog
               debugPrint("${e.response!.data}");
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -131,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } on Exception catch (e) {
+              Navigator.of(context).pop(); // Close the loading dialog
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content:
@@ -196,19 +226,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return Visibility(
       visible: isCustomise,
       child: Container(
-          height: 65,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-              color: const Color(0xffF5F5F5),
-              borderRadius: BorderRadius.circular(19)),
-          child: TextField(
-            controller: shortCodeController,
-            decoration: const InputDecoration(
-                contentPadding: EdgeInsets.only(top: 15),
-                border: InputBorder.none,
-                hintText: 'Enter custom code...',
-                hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 26)),
-          )),
+        height: 65,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+            color: const Color(0xffF5F5F5),
+            borderRadius: BorderRadius.circular(19)),
+        child: TextField(
+          style: const TextStyle(fontSize: 20),
+          controller: shortCodeController,
+          decoration: const InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 16),
+              border: InputBorder.none,
+              hintText: 'Enter custom code...',
+              hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 22)),
+        ),
+      ),
     );
   }
 
@@ -221,11 +253,12 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(19)),
       child: TextField(
         controller: linkIdController,
+        style: const TextStyle(fontSize: 20),
         decoration: const InputDecoration(
-          contentPadding: EdgeInsets.only(top: 15),
+          contentPadding: EdgeInsets.symmetric(vertical: 16),
           border: InputBorder.none,
           hintText: 'Enter your link here...',
-          hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 26),
+          hintStyle: TextStyle(color: Color(0xff7C7D7D), fontSize: 22),
         ),
       ),
     );
