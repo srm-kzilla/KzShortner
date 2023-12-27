@@ -96,8 +96,19 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context) {
                 return Dialog(
                   child: SizedBox(
-                    height: 150,
-                    child: Center(child: new CircularProgressIndicator()),
+                    height: 100,
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(width: 16),
+                            Text("Creating short link..."),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },
