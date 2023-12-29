@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Padding(padding: EdgeInsets.only(top: 21)),
                 Text(
-                  !isCustomise ? 'Customise' : 'Randomise',
+                  !isCustomise ? 'CUSTOMISE' : 'RANDOMIZE',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
