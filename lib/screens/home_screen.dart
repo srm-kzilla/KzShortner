@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Padding(padding: EdgeInsets.only(top: 21)),
                 Text(
-                  'SHRINK',
+                  'Shrink',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
