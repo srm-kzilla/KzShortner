@@ -85,7 +85,8 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                             mimeType: 'image/jpeg',
                           ),
                         ],
-                        text: 'QR Code for $kzillaUrl',
+                        text:
+                            'QR code for $kzillaUrl generated with ❤️ by SRMKZILLA',
                       );
                     } catch (e) {
                       debugPrint(e.toString());
