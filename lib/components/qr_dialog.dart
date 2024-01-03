@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,37 +46,22 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    imageUrl,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    fit: BoxFit.contain,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Container(
-                        width: 250,
-                        height: 250,
-                        child: Center(
-                          child: Text(
-                            'Loading...',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    height: 250,
+                    width: 250,
+                    placeholder: (context, url) => const Center(
+                      child: Text(
+                        'Loading QR Code...',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: 250,
-                        height: 250,
-                        child: Center(
-                          child: Text('Error loading image from URL'),
-                        ),
-                      );
-                    },
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(Icons.error),
+                    ),
                   ),
                 ),
               ),
@@ -99,7 +85,8 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                             mimeType: 'image/jpeg',
                           ),
                         ],
-                        text: 'QR Code for $kzillaUrl',
+                        text:
+                            'QR code for $kzillaUrl generated with ❤️ by SRMKZILLA',
                       );
                     } catch (e) {
                       debugPrint(e.toString());
