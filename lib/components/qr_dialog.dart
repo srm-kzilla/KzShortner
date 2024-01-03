@@ -1,28 +1,20 @@
-import 'dart:ui';
-
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:kzlinks/utils/fetcher.dart';
 import 'package:share_plus/share_plus.dart';
 
 Future<void> showQRDialog(BuildContext context, String shortCode) async {
-  final qrCode = QrCode.fromData(
-    data: "https://kzilla.xyz/$shortCode",
-    errorCorrectLevel: QrErrorCorrectLevel.H,
-  );
-
-  final qrImage = QrImage(qrCode);
-  const decoration = PrettyQrDecoration(
-    image: PrettyQrDecorationImage(
-      image: AssetImage(
-        'assets/kz_logo.png',
-      ),
-    ),
-  );
+  final kzillaUrl = 'https://kzilla.xyz/$shortCode';
+  final imageUrl =
+      'https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl=$kzillaUrl';
 
   await showDialog(
     context: context,
     builder: (context) {
       return Dialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         child: Container(
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.only(
@@ -43,9 +35,49 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                 ),
               ),
               const SizedBox(height: 20),
-              PrettyQrView(
-                qrImage: qrImage,
-                decoration: decoration,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                    width: 2,
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.network(
+                    imageUrl,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    fit: BoxFit.contain,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Container(
+                        width: 250,
+                        height: 250,
+                        child: Center(
+                          child: Text(
+                            'Loading...',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 250,
+                        height: 250,
+                        child: Center(
+                          child: Text('Error loading image from URL'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               const SizedBox(width: 10),
@@ -55,27 +87,19 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                 child: FilledButton(
                   onPressed: () async {
                     try {
-                      final image = await qrImage.toImageAsBytes(
-                        size: 2000,
-                        decoration: decoration,
-                        format: ImageByteFormat.png,
+                      final response = await dio.get(
+                        imageUrl,
+                        options: Options(responseType: ResponseType.bytes),
                       );
-
-                      if (image == null) {
-                        throw Exception(
-                          'Failed to save QR Code!',
-                        );
-                      }
-
                       await Share.shareXFiles(
                         [
                           XFile.fromData(
-                            image.buffer.asUint8List(),
-                            name: 'qr_code.png',
-                            mimeType: 'image/png',
+                            response.data as Uint8List,
+                            name: 'qr_code_$shortCode.jpeg',
+                            mimeType: 'image/jpeg',
                           ),
                         ],
-                        text: 'https://kzilla.xyz/$shortCode',
+                        text: 'QR Code for $kzillaUrl',
                       );
                     } catch (e) {
                       debugPrint(e.toString());
