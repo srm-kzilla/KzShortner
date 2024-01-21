@@ -1,14 +1,38 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:kzlinks/utils/fetcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<void> showQRDialog(BuildContext context, String shortCode) async {
   final kzillaUrl = 'https://kzilla.xyz/$shortCode';
-  final imageUrl =
-      'https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl=$kzillaUrl';
+  // final imageUrl =
+  //     'https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl=$kzillaUrl';
+
+  Future _shareQRImage() async {
+    final image = await QrPainter(
+      data: kzillaUrl,
+      version: QrVersions.auto,
+      gapless: true,
+      color: Colors.black,
+      emptyColor: Colors.white,
+    ).toImageData(200.0); // Generate QR code image data
+
+    final filename = 'qr_code.png';
+    final tempDir =
+        await getTemporaryDirectory(); // Get temporary directory to store the generated image
+    final file = await File('${tempDir.path}/$filename')
+        .create(); // Create a file to store the generated image
+    var bytes = image!.buffer.asUint8List(); // Get the image bytes
+    await file.writeAsBytes(bytes); // Write the image bytes to the file
+    final path = await Share.shareFiles([file.path],
+        text: 'QR code for ${kzillaUrl} generated with ❤️ by SRMKZILLA',
+        subject: 'QR Code',
+        mimeTypes: [
+          'image/png'
+        ]); // Share the generated image using the share_plus package
+    //print('QR code shared to: $path');
+  }
 
   await showDialog(
     context: context,
@@ -37,34 +61,21 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
               ),
               const SizedBox(height: 20),
               Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Colors.grey.shade300,
-                    width: 2,
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    height: 250,
-                    width: 250,
-                    placeholder: (context, url) => const Center(
-                      child: Text(
-                        'Loading QR Code...',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => const Center(
-                      child: Icon(Icons.error),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                      width: 2,
                     ),
                   ),
-                ),
-              ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: QrImageView(
+                      data: kzillaUrl,
+                      version: QrVersions.auto,
+                      size: 250,
+                    ),
+                  )),
               const SizedBox(height: 20),
               const SizedBox(width: 10),
               SizedBox(
@@ -73,21 +84,7 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                 child: FilledButton(
                   onPressed: () async {
                     try {
-                      final response = await dio.get(
-                        imageUrl,
-                        options: Options(responseType: ResponseType.bytes),
-                      );
-                      await Share.shareXFiles(
-                        [
-                          XFile.fromData(
-                            response.data as Uint8List,
-                            name: 'qr_code_$shortCode.jpeg',
-                            mimeType: 'image/jpeg',
-                          ),
-                        ],
-                        text:
-                            'QR code for $kzillaUrl generated with ❤️ by SRMKZILLA',
-                      );
+                      _shareQRImage();
                     } catch (e) {
                       debugPrint(e.toString());
                       ScaffoldMessenger.of(context).showSnackBar(
