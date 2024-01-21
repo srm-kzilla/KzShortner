@@ -1,14 +1,30 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:kzlinks/utils/fetcher.dart';
+import 'package:flutter/services.dart';
+import 'package:kzlinks/utils/load_image.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 Future<void> showQRDialog(BuildContext context, String shortCode) async {
   final kzillaUrl = 'https://kzilla.xyz/$shortCode';
-  final imageUrl =
-      'https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl=$kzillaUrl';
+
+  Future<ByteData> shareQRImage() async {
+    final kzlogo = await loadImage(context, "assets/kz_logo.jpg");
+    final image = await QrPainter(
+      data: kzillaUrl,
+      version: QrVersions.auto,
+      errorCorrectionLevel: QrErrorCorrectLevel.H,
+      color: Colors.black,
+      emptyColor: Colors.white,
+      gapless: true,
+      embeddedImage: kzlogo,
+    ).toImageData(1024.0);
+
+    return image!;
+  }
 
   await showDialog(
     context: context,
@@ -46,22 +62,13 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    height: 250,
-                    width: 250,
-                    placeholder: (context, url) => const Center(
-                      child: Text(
-                        'Loading QR Code...',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => const Center(
-                      child: Icon(Icons.error),
-                    ),
+                  child: QrImageView(
+                    data: kzillaUrl,
+                    size: 200,
+                    version: QrVersions.auto,
+                    gapless: true,
+                    errorCorrectionLevel: QrErrorCorrectLevel.H,
+                    embeddedImage: AssetImage("assets/kz_logo.jpg"),
                   ),
                 ),
               ),
@@ -73,20 +80,16 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                 child: FilledButton(
                   onPressed: () async {
                     try {
-                      final response = await dio.get(
-                        imageUrl,
-                        options: Options(responseType: ResponseType.bytes),
-                      );
+                      final logo = await shareQRImage();
+                      final dir = await getTemporaryDirectory();
+                      final byte = logo!.buffer.asUint8List();
+                      final file = File("${dir.path}/Image.png");
+                      await file.writeAsBytes(byte);
                       await Share.shareXFiles(
-                        [
-                          XFile.fromData(
-                            response.data as Uint8List,
-                            name: 'qr_code_$shortCode.jpeg',
-                            mimeType: 'image/jpeg',
-                          ),
-                        ],
+                        [XFile(file.path)],
                         text:
-                            'QR code for $kzillaUrl generated with ❤️ by SRMKZILLA',
+                            'QR code for ${kzillaUrl} generated with ❤️ by SRMKZILLA',
+                        subject: 'QR Code',
                       );
                     } catch (e) {
                       debugPrint(e.toString());
