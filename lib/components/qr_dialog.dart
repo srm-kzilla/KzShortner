@@ -9,7 +9,7 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
   final kzillaUrl = 'https://kzilla.xyz/$shortCode';
 
   Future _shareQRImage() async {
-    final kzlogo = await loadImage(context, "assets/kz_logo.png")
+    final kzlogo = await loadImage(context, "assets/kz_logo.png");
 
     final image = await QrPainter(
       data: kzillaUrl,
