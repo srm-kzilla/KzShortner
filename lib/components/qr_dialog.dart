@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:kzlinks/utils/load_image.dart';
 
 Future<void> showQRDialog(BuildContext context, String shortCode) async {
   final kzillaUrl = 'https://kzilla.xyz/$shortCode';
-  // final imageUrl =
-  //     'https://chart.googleapis.com/chart?cht=qr&chs=500x500&chl=$kzillaUrl';
 
   Future _shareQRImage() async {
+    final kzlogo = await loadImage(context, "assets/kz_logo.png")
+
     final image = await QrPainter(
       data: kzillaUrl,
       version: QrVersions.auto,
       gapless: true,
       color: Colors.black,
+      embeddedImage: kzlogo,
       emptyColor: Colors.white,
     ).toImageData(200.0); // Generate QR code image data
 
@@ -70,9 +72,10 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: QrImageView(
+                    child: QrImage(
                       data: kzillaUrl,
                       version: QrVersions.auto,
+                      embeddedImage: AssetImage("assets/kz_logo.png"),
                       size: 250,
                     ),
                   )),
