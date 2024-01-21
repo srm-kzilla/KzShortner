@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kzlinks/utils/load_image.dart';
@@ -80,24 +78,17 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                   onPressed: () async {
                     try {
                       final logo = await shareQRImage();
-                      if (kIsWeb) {
-                        Uint8List uint8list = logo.buffer.asUint8List();
-                        Blob blob = Blob([uint8list], 'image/png');
-                        String url = Url.createObjectUrlFromBlob(blob);
-                        window.open(url, '_blank');
-                      } else {
-                        await Share.shareXFiles(
-                          [
-                            XFile(
-                              'qr_code.png',
-                              bytes: logo.buffer.asUint8List(),
-                            )
-                          ],
-                          text:
-                              'QR code for ${kzillaUrl} generated with ❤️ by SRMKZILLA',
-                          subject: 'QR Code',
-                        );
-                      }
+                      await Share.shareXFiles(
+                        [
+                          XFile(
+                            'qr_code.png',
+                            bytes: logo.buffer.asUint8List(),
+                          )
+                        ],
+                        text:
+                            'QR code for ${kzillaUrl} generated with ❤️ by SRMKZILLA',
+                        subject: 'QR Code',
+                      );
                     } catch (e) {
                       debugPrint(e.toString());
                       ScaffoldMessenger.of(context).showSnackBar(
