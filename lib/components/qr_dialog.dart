@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kzlinks/utils/load_image.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -8,8 +12,7 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
   final kzillaUrl = 'https://kzilla.xyz/$shortCode';
 
   Future<ByteData> shareQRImage() async {
-    final kzlogo = await loadImage(context, "kz_logo.jpg");
-
+    final kzlogo = await loadImage(context, "assets/kz_logo.jpg");
     final image = await QrPainter(
       data: kzillaUrl,
       version: QrVersions.auto,
@@ -65,7 +68,7 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                     version: QrVersions.auto,
                     gapless: true,
                     errorCorrectionLevel: QrErrorCorrectLevel.H,
-                    embeddedImage: AssetImage("kz_logo.jpg"),
+                    embeddedImage: AssetImage("assets/kz_logo.jpg"),
                   ),
                 ),
               ),
@@ -78,13 +81,12 @@ Future<void> showQRDialog(BuildContext context, String shortCode) async {
                   onPressed: () async {
                     try {
                       final logo = await shareQRImage();
+                      final dir = await getTemporaryDirectory();
+                      final byte = logo!.buffer.asUint8List();
+                      final file = File("${dir.path}/Image.png");
+                      await file.writeAsBytes(byte);
                       await Share.shareXFiles(
-                        [
-                          XFile(
-                            'qr_code.png',
-                            bytes: logo.buffer.asUint8List(),
-                          )
-                        ],
+                        [XFile(file.path)],
                         text:
                             'QR code for ${kzillaUrl} generated with ❤️ by SRMKZILLA',
                         subject: 'QR Code',
