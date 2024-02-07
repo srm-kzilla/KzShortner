@@ -32,12 +32,15 @@ class LinkTile extends StatelessWidget {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
-                  child: Text(
-                    "kzilla.xyz/${link.shortCode}",
-                    style: const TextStyle(
-                      fontSize: 20,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 15.0),
+                    child: Text(
+                      "kzilla.xyz/${link.shortCode}",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Positioned(
