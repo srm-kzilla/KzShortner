@@ -132,7 +132,7 @@ class LinkTile extends StatelessWidget {
                               Future<void> editLink() async {
                                 final url = customUrlController.text.trim();
 
-                                if (url == link.longUrl) {
+                                if (url == link.longUrl || url == 'https://kzilla.xyz/${link.shortCode}') {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: const Text(
