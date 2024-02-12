@@ -8,6 +8,7 @@ import 'package:kzlinks/model/link.dart';
 import 'package:kzlinks/screens/analytic_screen.dart';
 import 'package:kzlinks/services/api_services.dart';
 import 'package:kzlinks/utils/constants.dart';
+import 'package:kzlinks/utils/match_url.dart';
 import 'package:kzlinks/utils/number_format.dart';
 
 class LinkTile extends StatelessWidget {
@@ -32,12 +33,15 @@ class LinkTile extends StatelessWidget {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
-                  child: Text(
-                    "kzilla.xyz/${link.shortCode}",
-                    style: const TextStyle(
-                      fontSize: 20,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 15.0),
+                    child: Text(
+                      "kzilla.xyz/${link.shortCode}",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Positioned(
@@ -128,7 +132,7 @@ class LinkTile extends StatelessWidget {
 
                               Future<void> editLink() async {
                                 final url = customUrlController.text.trim();
-
+                                
                                 if (url == link.longUrl) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -158,6 +162,31 @@ class LinkTile extends StatelessWidget {
                                     SnackBar(
                                       content: const Text(
                                           'Please enter a valid URL'),
+                                      backgroundColor: Colors.red.shade600,
+                                      duration: const Duration(
+                                          seconds: 2, milliseconds: 500),
+                                      showCloseIcon: true,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      behavior: SnackBarBehavior.floating,
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 20,
+                                      ),
+                                      dismissDirection:
+                                          DismissDirection.horizontal,
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                if (matchUrl(url,
+                                        'https://kzilla.xyz/${link.shortCode}')) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: const Text(
+                                          'Duplicate URL not allowed!'),
                                       backgroundColor: Colors.red.shade600,
                                       duration: const Duration(
                                           seconds: 2, milliseconds: 500),
@@ -348,7 +377,9 @@ class LinkTile extends StatelessWidget {
                               SnackBar(
                                 content: Text(
                                     'Link is ${!link.enabled ? "Enabled" : "Disabled"}'),
-                                backgroundColor: link.enabled? Colors.red.shade600 : Colors.green.shade600,
+                                backgroundColor: link.enabled
+                                    ? Colors.red.shade600
+                                    : Colors.green.shade600,
                                 duration: const Duration(
                                     seconds: 2, milliseconds: 500),
                                 showCloseIcon: true,
@@ -391,8 +422,10 @@ class LinkTile extends StatelessWidget {
                         child: Row(
                           children: [
                             link.enabled
-                                ? Icon(Icons.toggle_on,color: Colors.green.shade600)
-                                : Icon(Icons.toggle_off,color: Colors.red.shade600),
+                                ? Icon(Icons.toggle_on,
+                                    color: Colors.green.shade600)
+                                : Icon(Icons.toggle_off,
+                                    color: Colors.red.shade600),
                             const SizedBox(width: 8),
                             Text(link.enabled ? 'Disable' : 'Enable'),
                           ],
