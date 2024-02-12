@@ -8,6 +8,7 @@ import 'package:kzlinks/model/link.dart';
 import 'package:kzlinks/screens/analytic_screen.dart';
 import 'package:kzlinks/services/api_services.dart';
 import 'package:kzlinks/utils/constants.dart';
+import 'package:kzlinks/utils/match_url.dart';
 import 'package:kzlinks/utils/number_format.dart';
 
 class LinkTile extends StatelessWidget {
@@ -131,27 +132,7 @@ class LinkTile extends StatelessWidget {
 
                               Future<void> editLink() async {
                                 final url = customUrlController.text.trim();
-                                bool matchUrl(
-                                    String inputUrl, String expectedUrl) {
-                                  Uri inputUri = Uri.parse(inputUrl);
-                                  Uri expectedUri = Uri.parse(expectedUrl);
-
-                                  if (inputUri.pathSegments.length !=
-                                      expectedUri.pathSegments.length) {
-                                    return false;
-                                  }
-
-                                  for (int i = 0;
-                                      i < inputUri.pathSegments.length;
-                                      i++) {
-                                    if (inputUri.pathSegments[i] !=
-                                        expectedUri.pathSegments[i]) {
-                                      return false;
-                                    }
-                                  }
-
-                                  return inputUri.queryParameters.isEmpty;
-                                }
+                                
                                 if (url == link.longUrl) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -201,11 +182,7 @@ class LinkTile extends StatelessWidget {
                                 }
 
                                 if (matchUrl(url,
-                                        'https://kzilla.xyz/${link.shortCode}') ||
-                                    (url ==
-                                        'https://kzilla.xyz/${link.shortCode}') ||
-                                    (url ==
-                                        'http://kzilla.xyz/${link.shortCode}')) {
+                                        'https://kzilla.xyz/${link.shortCode}')) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: const Text(
