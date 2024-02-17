@@ -89,11 +89,6 @@ class _MyLinksState extends State<MyLinks> {
                           'Failed to load links!',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        // const SizedBox(height: 20),
-                        // Text(
-                        //   '${snapshot.error}',
-                        //   style: Theme.of(context).textTheme.bodyLarge,
-                        // ),
                       ],
                     ),
                   ],

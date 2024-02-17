@@ -24,7 +24,6 @@ void run() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true),
       routes: {
-        //'/splash': (context) => const SplashScreen(),
         '/': (context) => const SplashScreen(),
         '/home': (context) => const HomeScreen(),
         '/my_links': (context) => const MyLinks(),
