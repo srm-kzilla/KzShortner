@@ -179,6 +179,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   dismissDirection: DismissDirection.horizontal,
                 ),
               );
+            } finally {
+              linkIdController.clear();
+              shortCodeController.clear();
             }
           },
           child: Container(
@@ -244,6 +247,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    linkIdController.dispose();
+    shortCodeController.dispose(); // Dispose of the controller when done
+    super.dispose();
+  }
+
   Widget searchBox() {
     return Container(
       height: 65,
@@ -262,13 +272,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    linkIdController.dispose();
-    shortCodeController.dispose(); // Dispose of the controller when done
-    super.dispose();
   }
 
   AppBar _buildAppBar() {
