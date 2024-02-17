@@ -7,36 +7,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
     permissions:
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
-          distribution: "zulu"
-          java-version: "17"
-          cache: "gradle"
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.16.4"
+          flutter-version: "3.16.7"
           cache: true
-
-      - run: flutter pub get
-      - run: flutter build apk
-
-      - name: Release APK
-        uses: ncipollo/release-action@v1
-        if: startsWith(github.ref, 'refs/tags/v')
+      - uses: oberhauser-dev/flutter-release-action@v0
         with:
-          allowUpdates: true
-          name: "KzShortner ${{ github.ref_name }}"
-          body: "Check the assets for the APK."
-          artifacts: "build/app/outputs/apk/release/*.apk"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          app-name: 'KzShortner'
+          app-version: ${{ github.ref_name }}
           tag: ${{ github.ref }}
+          release-type: 'apk'
+          token: ${{ github.token }}
