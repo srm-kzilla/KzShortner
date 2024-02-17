@@ -26,7 +26,7 @@ The Flutter app follows a concise structure within the `lib` folder, organizing 
 
 ## Shout outs 💥
 
-| <p align="center">![Harsh Patel](https://github.com/HarshPatel5940.png?size=128)<br>[Harsh Patel](https://github.com/HarshPatel5940)</p> | <p align="center">![Jatin](https://github.com/jatindotdev.png?size=128)<br>[Jatin](https://github.com/jatindotdev)</p> | <p align="center">![Shail Antani](https://github.com/shailantani.png?size=128)<br>[Shail Antani](https://github.com/shailantani)</p> | <p align="center">![Shivam Bansal](https://github.com/ShivamBansal07.png?size=128)<br>[Shivam Bansal](https://github.com/ShivamBansal07)</p> |
+| <p align="center">![Jatin](https://github.com/jatindotdev.png?size=128)<br>[Jatin](https://github.com/jatindotdev)</p> | <p align="center">![Shail Antani](https://github.com/shailantani.png?size=128)<br>[Shail Antani](https://github.com/shailantani)</p> | <p align="center">![Shivam Bansal](https://github.com/ShivamBansal07.png?size=128)<br>[Shivam Bansal](https://github.com/ShivamBansal07)</p> | <p align="center">![Harsh Patel](https://github.com/HarshPatel5940.png?size=128)<br>[Harsh Patel](https://github.com/HarshPatel5940)</p> |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 
 ## Forking this repo 🚨
