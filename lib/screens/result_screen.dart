@@ -267,13 +267,9 @@ class _HomeScreenState extends State<ResultScreen> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          //Padding(padding: EdgeInsets.only(left: 0)),
           const Image(
               image: ResizeImage(AssetImage('assets/icon.png'),
                   width: 50, height: 50)),
-
-          // to add space between the two objects in appbar
-
           GestureDetector(
               child: Container(
                 height: 50,
